@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope;
+import java.util.concurrent.StructuredTaskScope.Joiner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -19,15 +20,15 @@ public class Exercise6Test {
     // Use weather-info from the source that retrieves it fastest.
     @Test
     public void getWeatherC() {
-         try (var scope = new StructuredTaskScope.ShutdownOnSuccess<Weather>()) {
+         try (var scope = StructuredTaskScope.open(Joiner.<Weather>anySuccessfulResultOrThrow())) {
              scope.fork(() -> WeatherService.getWeatherFromSource1("Amsterdam"));
              scope.fork(() -> WeatherService.getWeatherFromSource2("Amsterdam"));
              scope.fork(() -> WeatherService.getWeatherFromSource3("Amsterdam"));
 
-             var weather = scope.join().result();
+             var weather = scope.join();
 
              assertTrue(weather instanceof Weather);
-         } catch (InterruptedException | ExecutionException e) {
+         } catch (InterruptedException e) {
              e.printStackTrace();
          }
     }
