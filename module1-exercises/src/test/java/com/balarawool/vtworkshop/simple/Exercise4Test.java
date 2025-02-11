@@ -15,8 +15,8 @@ class Exercise4Test {
     // Go to ServerApplication (in module2-server-app) and enable virtual threads.
     @Test
     public void testGetThread() throws Exception {
-        assertTrue(false, "Exercise not completed");
         HttpResponse<String> response = ServerUtil.call("/thread");
+        System.out.println(response.body());
         assertTrue(response.body().contains("VirtualThread"));
     }
 }

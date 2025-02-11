@@ -50,11 +50,11 @@ public class BankingPortalService {
 
     public static Offer calculateOffer(String id, String savings, String loans) {
         try {
-            LogUtil.log("Starting: getCurrentCustomer()");
+            LogUtil.log("Starting: calculateOffer()");
             HttpResponse<String> response = ServerUtil.call("/offer", Map.of("id", id, "savings", savings, "loans", loans));
             var offer = new ObjectMapper().readValue(response.body(), Offer.class);
 
-            LogUtil.log("Done: getCurrentCustomer()");
+            LogUtil.log("Done: calculateOffer()");
             return offer;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

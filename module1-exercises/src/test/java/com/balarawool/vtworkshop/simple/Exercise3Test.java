@@ -3,6 +3,8 @@ package com.balarawool.vtworkshop.simple;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,15 +18,19 @@ public class Exercise3Test {
     // Check that number of platform-threads is significantly lower than number of virtual-threads.
     @Test
     public void testVirtualThreadsCpuUsage() {
-        assertTrue(false, "Exercise not completed");
-        var setVTs = new HashSet<String>();
-        var setPTs = new HashSet<String>();
-        //try (var executor = ...) {
-        //}
+        var setVTs = new ConcurrentSkipListSet<String>();
+        var setPTs = new ConcurrentSkipListSet<String>();
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            for (int i=0; i<1000; i++) {
+                executor.submit(() -> task(setVTs, setPTs));
+            }
+        }
+//        System.out.println(setPTs.size());
+//        System.out.println(setVTs.size());
         assertTrue(setPTs.size() < setVTs.size(), "Few platform threads support large number of virtual threads.");
     }
 
-    private void task(HashSet<String> setVTs, HashSet<String> setPTs) {
+    private void task(Set<String> setVTs, Set<String> setPTs) {
         updateThreadSets(setVTs, setPTs);
         try {
             Thread.sleep(1000);
@@ -34,7 +40,7 @@ public class Exercise3Test {
         updateThreadSets(setVTs, setPTs);
     }
 
-    private void updateThreadSets(HashSet<String> setVTs, HashSet<String> setPTs) {
+    private void updateThreadSets(Set<String> setVTs, Set<String> setPTs) {
         var thread = Thread.currentThread().toString();
         var vtName = thread.substring(0, thread.indexOf('/'));
         var ptName = thread.substring(thread.indexOf('@')+1);

@@ -1,5 +1,6 @@
 package com.balarawool.vtworkshop.simple;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.lang.management.ManagementFactory;
@@ -8,10 +9,16 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * IMPORTANT: DO NOT USE THIS EXERCISE.
+ * The goal was to show that virtual threads use significantly less memory than platform threads.
+ * But the way it is used below, it does not give precise and timely information about memory-usage and hence it is not a proper test.
+ */
 public class Exercise2ATest {
 
     private static Runtime RUNTIME = Runtime.getRuntime();
 
+    @Disabled
     @Test
     public void virtualThreadMemory() throws InterruptedException {
         var vts = measureMemory2(() -> {

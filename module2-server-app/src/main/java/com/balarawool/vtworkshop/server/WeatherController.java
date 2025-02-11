@@ -10,19 +10,19 @@ import static com.balarawool.vtworkshop.server.ThreadUtil.logAndWait;
 public class WeatherController {
 
     @GetMapping("/weatherFromSource1")
-    public static Weather getWeatherFromSource1(@RequestParam String city) {
+    public static Weather getWeatherFromSource1(@RequestParam("city") String city) {
         logAndWait("getWeatherFromSource1");
         return new Weather("10 C");
     }
 
     @GetMapping("/weatherFromSource2")
-    public static Weather getWeatherFromSource2(@RequestParam String city) {
+    public static Weather getWeatherFromSource2(@RequestParam("city") String city) {
         logAndWait("getWeatherFromSource2");
         return new Weather("9 C");
     }
 
     @GetMapping("/weatherFromSource3")
-    public static Weather getWeatherFromSource3(@RequestParam String city) {
+    public static Weather getWeatherFromSource3(@RequestParam("city") String city) {
         logAndWait("getWeatherFromSource3");
         return new Weather("8 C");
     }

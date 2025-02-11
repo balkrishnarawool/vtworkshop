@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class Exercise8Test {
 
@@ -19,7 +20,7 @@ public class Exercise8Test {
     // In these methods, read the customer from Metadata.LOGGED_IN_USER and use customer.id() from there.
     @Test
     public void createOfferWithSC() throws InterruptedException {
-        assertTrue(false, "Exercise not completed");
+        fail("Exercise not completed");
         Thread.startVirtualThread(this::createOffer).join();
     }
 
