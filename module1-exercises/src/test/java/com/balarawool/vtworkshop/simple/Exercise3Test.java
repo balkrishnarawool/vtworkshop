@@ -13,20 +13,18 @@ public class Exercise3Test {
 
     // TODO Exercise 3: Few platform threads support large number of virtual threads.
     // This is because virtual threads don't block CPU or carrier thread.
-    // Create an Executor that gives virtual-threads on each request.
+    // Create an ExecutorService that gives virtual-threads on each request.
     // Use that to create 1000 virtual-threads, each thread calls task() method from this class.
     // Check that number of platform-threads is significantly lower than number of virtual-threads.
     @Test
     public void testVirtualThreadsCpuUsage() {
         var setVTs = new ConcurrentSkipListSet<String>();
         var setPTs = new ConcurrentSkipListSet<String>();
-        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            for (int i=0; i<1000; i++) {
-                executor.submit(() -> task(setVTs, setPTs));
-            }
-        }
-//        System.out.println(setPTs.size());
-//        System.out.println(setVTs.size());
+        //try (var executor = ...) {
+        //...
+        //}
+        //System.out.println(setPTs.size());
+        //System.out.println(setVTs.size());
         assertTrue(setPTs.size() < setVTs.size(), "Few platform threads support large number of virtual threads.");
     }
 
