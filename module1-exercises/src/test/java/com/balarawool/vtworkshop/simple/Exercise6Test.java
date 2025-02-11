@@ -19,12 +19,16 @@ public class Exercise6Test {
     // Use weather-info from the source that retrieves it fastest.
     @Test
     public void getWeatherC() {
-        fail("Exercise not completed");
-        // try (var scope = ...) {
-        //     ...
-        //    assertTrue(weather instanceof Weather);
-        // } catch (InterruptedException | ExecutionException e) {
-        //   e.printStackTrace();
-        // }
+         try (var scope = new StructuredTaskScope.ShutdownOnSuccess<Weather>()) {
+             scope.fork(() -> WeatherService.getWeatherFromSource1("Amsterdam"));
+             scope.fork(() -> WeatherService.getWeatherFromSource2("Amsterdam"));
+             scope.fork(() -> WeatherService.getWeatherFromSource3("Amsterdam"));
+
+             var weather = scope.join().result();
+
+             assertTrue(weather instanceof Weather);
+         } catch (InterruptedException | ExecutionException e) {
+             e.printStackTrace();
+         }
     }
 }

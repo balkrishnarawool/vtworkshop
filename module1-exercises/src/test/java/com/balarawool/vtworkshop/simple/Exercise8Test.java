@@ -2,6 +2,7 @@ package com.balarawool.vtworkshop.simple;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope;
 
@@ -20,26 +21,27 @@ public class Exercise8Test {
     // In these methods, read the customer from Metadata.LOGGED_IN_USER and use customer.id() from there.
     @Test
     public void createOfferWithSC() throws InterruptedException {
-        fail("Exercise not completed");
         Thread.startVirtualThread(this::createOffer).join();
     }
 
     private void createOffer() {
-        // var customer = BankingPortalService.getCurrentCustomer();
-        // Set Metadata.LOGGED_IN_USER here and call below code in run() method of ScopedValue:
-        //    try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-        //            var task1 = scope.fork(() -> NewBankingPortalService.getSavingsData());
-        //            var task2 = scope.fork(() -> NewBankingPortalService.getLoansData());
-        //
-        //            scope.join().throwIfFailed();
-        //
-        //            var savings = task1.get();
-        //            var loans = task2.get();
-        //
-        //            var offer = NewBankingPortalService.calculateOffer(savings.savingsAmount(), loans.loansAmount());
-        //            System.out.println(offer);
-        //    } catch (InterruptedException | ExecutionException e) {
-        //        throw new RuntimeException(e);
-        //    }
+         var customer = NewBankingPortalService.getCurrentCustomer();
+         ScopedValue.where(Metadata.LOGGED_IN_USER, customer).run(() -> {
+             var id = Metadata.LOGGED_IN_USER.get().id();
+             try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+                 var task1 = scope.fork(() -> NewBankingPortalService.getSavingsData(id));
+                 var task2 = scope.fork(() -> NewBankingPortalService.getLoansData(id));
+
+                 scope.join().throwIfFailed();
+
+                 var savings = task1.get();
+                 var loans = task2.get();
+
+                 var offer = NewBankingPortalService.calculateOffer(id, savings.savingsAmount(), loans.loansAmount());
+                 System.out.println(offer);
+             } catch (InterruptedException | ExecutionException e) {
+                 throw new RuntimeException(e);
+             }
+         });
     }
 }

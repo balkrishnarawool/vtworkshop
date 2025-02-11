@@ -18,12 +18,21 @@ public class Exercise5Test {
     // Create Event by using the above venue, hotel and supplies.
     @Test
     public void createEvent() {
-        fail("Exercise not completed");
-        // try (var scope = ...) {
-        // ...
-        //    assertTrue(event instanceof Event);
-        //} catch (InterruptedException | ExecutionException e) {
-        //    e.printStackTrace();
-        //}
+         try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+             var task1 = scope.fork(() -> EventService.reserveVenue());
+             var task2 = scope.fork(() -> EventService.bookHotel());
+             var task3 = scope.fork(() -> EventService.buySupplies());
+
+             scope.join().throwIfFailed();
+
+             var venue = task1.get();
+             var hotel = task2.get();
+             var supplies = task3.get();
+             var event = new Event(venue, hotel, supplies);
+
+            assertTrue(event instanceof Event);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }
