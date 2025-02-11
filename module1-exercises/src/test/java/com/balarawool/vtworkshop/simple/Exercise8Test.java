@@ -25,7 +25,7 @@ public class Exercise8Test {
     }
 
     private void createOffer() {
-        // var customer = BankingPortalService.getCurrentCustomer();
+        // var customer = NewBankingPortalService.getCurrentCustomer();
         // Set Metadata.LOGGED_IN_USER here and call below code in run() method of ScopedValue:
         //    try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
         //            var task1 = scope.fork(() -> NewBankingPortalService.getSavingsData());
